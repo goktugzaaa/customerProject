@@ -13,7 +13,7 @@ export default function CompletionScreen({ onRestart }: CompletionScreenProps) {
       {/* Background glow */}
       <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[250px] h-[250px] rounded-full opacity-25 blur-[80px]"
-        style={{ background: "var(--gradient-primary)" }}
+        style={{ background: "var(--accent)" }}
       />
 
       {/* Success icon */}
@@ -25,7 +25,7 @@ export default function CompletionScreen({ onRestart }: CompletionScreenProps) {
       >
         <div
           className="w-20 h-20 rounded-full flex items-center justify-center"
-          style={{ backgroundImage: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)" }}
+          style={{ background: "var(--accent)" }}
         >
           <Check className="w-9 h-9 text-white" strokeWidth={2.5} />
         </div>
@@ -47,10 +47,10 @@ export default function CompletionScreen({ onRestart }: CompletionScreenProps) {
         transition={{ delay: 0.3, duration: 0.5 }}
         className="text-center"
       >
-        <h2 className="text-2xl font-bold text-white mb-2">
+        <h2 className="text-2xl font-bold text-foreground mb-2">
           You&apos;re All Set!
         </h2>
-        <p className="text-white/40 text-sm leading-relaxed max-w-[260px] mx-auto">
+        <p className="text-muted text-sm leading-relaxed max-w-[260px] mx-auto">
           Your souvenir song preferences have been saved. SongZoo will start
           crafting your personalised track for Icon of the Seas.
         </p>
@@ -63,7 +63,7 @@ export default function CompletionScreen({ onRestart }: CompletionScreenProps) {
         transition={{ delay: 0.5, duration: 0.5 }}
         className="glass-strong rounded-2xl p-5 mt-8 w-full max-w-[280px]"
       >
-        <div className="text-xs text-white/30 uppercase tracking-widest mb-3">
+        <div className="text-xs text-muted uppercase tracking-widest mb-3">
           What happens next
         </div>
         <div className="space-y-3">
@@ -75,11 +75,11 @@ export default function CompletionScreen({ onRestart }: CompletionScreenProps) {
             <div key={i} className="flex items-center gap-3">
               <div
                 className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0"
-                style={{ backgroundImage: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)" }}
+                style={{ background: "var(--accent)" }}
               >
                 {i + 1}
               </div>
-              <span className="text-sm text-white/60">{item}</span>
+              <span className="text-sm text-muted">{item}</span>
             </div>
           ))}
         </div>
@@ -89,7 +89,7 @@ export default function CompletionScreen({ onRestart }: CompletionScreenProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.75 }}
-        className="mt-6 text-[10px] uppercase tracking-[0.28em] text-white/25"
+        className="mt-6 text-[10px] uppercase tracking-[0.28em] text-muted opacity-80"
       >
         Powered by SongZoo
       </motion.p>
@@ -99,7 +99,7 @@ export default function CompletionScreen({ onRestart }: CompletionScreenProps) {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.85 }}
         onClick={onRestart}
-        className="mt-5 flex items-center gap-2 text-sm text-white/30 hover:text-white/50 transition-colors"
+        className="mt-5 flex items-center gap-2 text-sm text-muted hover:text-foreground transition-colors"
       >
         <RotateCcw className="w-4 h-4" />
         Start Over

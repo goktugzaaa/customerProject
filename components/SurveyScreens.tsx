@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import BrandedHeader from "./BrandedHeader";
 
 const AMENITIES = [
   "Spa",
@@ -35,7 +34,6 @@ export function SurveyRatingsScreen({
 
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
-      <BrandedHeader />
       <div className="px-5 pb-8 flex-1 pt-2">
         <ScaleBlock
           title="How likely are you to recommend this cruise to others?"
@@ -63,17 +61,9 @@ export function SurveyRatingsScreen({
           whileTap={canNext ? { scale: 0.98 } : undefined}
           className={`mt-8 w-full py-4 rounded-2xl font-semibold ${
             canNext
-              ? "text-white"
-              : "text-white/30 bg-white/[0.06] cursor-not-allowed"
+              ? "bg-[var(--accent)] text-white shadow-md active:brightness-95"
+              : "text-muted bg-[var(--surface-light)] cursor-not-allowed"
           }`}
-          style={
-            canNext
-              ? {
-                  backgroundImage:
-                    "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-                }
-              : undefined
-          }
         >
           NEXT &gt;
         </motion.button>
@@ -95,7 +85,7 @@ function ScaleBlock({
 }) {
   return (
     <div className="mb-8">
-      <p className="text-[15px] font-semibold text-white leading-snug mb-3">
+      <p className="text-[15px] font-semibold text-foreground leading-snug mb-3">
         {title}
       </p>
       <div className="flex flex-wrap gap-2">
@@ -108,17 +98,9 @@ function ScaleBlock({
               onClick={() => onPick(v)}
               className={`min-w-[40px] py-2 px-3 rounded-xl text-sm font-medium border ${
                 sel
-                  ? "border-transparent text-white"
-                  : "border-white/10 text-white/50 bg-white/[0.03]"
+                  ? "border-transparent bg-[var(--accent)] text-white"
+                  : "border-[var(--surface-border)] text-muted bg-[var(--surface)]"
               }`}
-              style={
-                sel
-                  ? {
-                      backgroundImage:
-                        "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-                    }
-                  : undefined
-              }
             >
               {v}
             </button>
@@ -142,9 +124,8 @@ export function SurveyAmenitiesScreen({
 }: Survey2Props) {
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
-      <BrandedHeader />
       <div className="px-5 pb-8 flex-1 pt-4">
-        <p className="text-[15px] font-semibold text-white leading-snug mb-5">
+        <p className="text-[15px] font-semibold text-foreground leading-snug mb-5">
           Which onboard amenities did you use during your cruise? (Select all
           that apply)
         </p>
@@ -158,17 +139,9 @@ export function SurveyAmenitiesScreen({
                 onClick={() => onToggle(a)}
                 className={`py-4 px-3 rounded-2xl text-sm font-medium border text-left ${
                   on
-                    ? "border-transparent text-white"
-                    : "border-white/10 text-white/55 bg-white/[0.03]"
+                    ? "border-transparent bg-[var(--accent)] text-white"
+                    : "border-[var(--surface-border)] text-foreground bg-[var(--surface)]"
                 }`}
-                style={
-                  on
-                    ? {
-                        backgroundImage:
-                          "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-                      }
-                    : undefined
-                }
               >
                 {a}
               </button>
@@ -179,11 +152,7 @@ export function SurveyAmenitiesScreen({
           type="button"
           onClick={onNext}
           whileTap={{ scale: 0.98 }}
-          className="mt-10 w-full py-4 rounded-2xl text-white font-semibold"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-          }}
+          className="mt-10 w-full rounded-2xl bg-[var(--accent)] py-4 font-semibold text-white shadow-md active:brightness-95"
         >
           NEXT &gt;
         </motion.button>
@@ -205,9 +174,8 @@ export function SurveySuggestionsScreen({
 }: Survey3Props) {
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
-      <BrandedHeader />
       <div className="px-5 pb-8 flex-1 pt-4 flex flex-col">
-        <p className="text-[15px] font-semibold text-white leading-snug mb-4">
+        <p className="text-[15px] font-semibold text-foreground leading-snug mb-4">
           Do you have any suggestions or ideas on how we could mak your next
           cruise with us more enjoyable?
         </p>
@@ -215,17 +183,13 @@ export function SurveySuggestionsScreen({
           value={text}
           onChange={(e) => onChange(e.target.value)}
           rows={6}
-          className="w-full px-4 py-3 rounded-2xl bg-white/[0.05] border border-white/10 text-white text-sm flex-1 min-h-[140px]"
+          className="w-full px-4 py-3 rounded-2xl bg-[var(--surface)] border border-[var(--surface-border)] text-foreground text-sm flex-1 min-h-[140px]"
         />
         <motion.button
           type="button"
           onClick={onSend}
           whileTap={{ scale: 0.98 }}
-          className="mt-6 w-full py-4 rounded-2xl text-white font-bold uppercase tracking-wide"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-          }}
+          className="mt-6 w-full rounded-2xl bg-[var(--accent)] py-4 font-bold uppercase tracking-wide text-white shadow-md active:brightness-95"
         >
           SEND!
         </motion.button>
@@ -247,19 +211,18 @@ export function ThankYouScreen({
 }: ThankYouProps) {
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
-      <BrandedHeader />
       <div className="flex-1 flex flex-col items-center justify-center px-6 pb-10">
-        <h2 className="text-2xl font-bold text-white text-center">
+        <h2 className="text-2xl font-bold text-foreground text-center">
           THANK YOU!
         </h2>
-        <p className="mt-6 text-[14px] text-white/45 text-center leading-relaxed">
+        <p className="mt-6 text-[14px] text-muted text-center leading-relaxed">
           We really appreciate your feedback.
         </p>
-        <p className="mt-4 text-[14px] text-white/45 text-center leading-relaxed">
+        <p className="mt-4 text-[14px] text-muted text-center leading-relaxed">
           Your personalized souvenir song will be emailed to you within 24-48
           hours and is yours to keep as a &quot;forever&quot; memory!
         </p>
-        <p className="mt-4 text-[14px] text-white/45 text-center leading-relaxed">
+        <p className="mt-4 text-[14px] text-muted text-center leading-relaxed">
           We hope to see you again soon!
         </p>
         {sendError && (
@@ -272,10 +235,10 @@ export function ThankYouScreen({
           onClick={onOk}
           disabled={isSending}
           whileTap={isSending ? undefined : { scale: 0.97 }}
-          className={`mt-10 w-full max-w-[200px] py-4 rounded-2xl border text-white font-semibold ${
+          className={`mt-10 w-full max-w-[200px] py-4 rounded-2xl border font-semibold ${
             isSending
-              ? "border-white/10 text-white/40 cursor-wait"
-              : "border-white/20"
+              ? "border-[var(--surface-border)] text-muted bg-[var(--surface-light)] cursor-wait"
+              : "border-[var(--accent)] text-[var(--accent)] bg-[var(--background)]"
           }`}
         >
           {isSending ? "Gönderiliyor…" : "OK"}

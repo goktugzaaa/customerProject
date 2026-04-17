@@ -1,18 +1,21 @@
 @import "tailwindcss";
 
+/* Açık tema: beyaz arka plan, koyu metin (telefon içi uygulama) */
 :root {
-  --background: #07070f;
-  --foreground: #f0f0f5;
-  --accent: #6366f1;
-  --accent-light: #818cf8;
-  --accent-glow: rgba(99, 102, 241, 0.35);
-  --surface: #111127;
-  --surface-light: #1a1a3e;
-  --surface-border: rgba(255, 255, 255, 0.06);
-  --text-muted: rgba(255, 255, 255, 0.45);
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-  --gradient-surface: linear-gradient(180deg, rgba(99, 102, 241, 0.08) 0%, transparent 100%);
+  --background: #ffffff;
+  --foreground: #0f172a;
+  --accent: #2563eb;
+  --accent-light: #3b82f6;
+  --accent-glow: rgba(37, 99, 235, 0.32);
+  --surface: #f1f5f9;
+  --surface-light: #e2e8f0;
+  --surface-border: rgba(15, 23, 42, 0.12);
+  --text-muted: rgba(15, 23, 42, 0.55);
+  --text-secondary: rgba(15, 23, 42, 0.75);
+  --gradient-primary: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(37, 99, 235, 0.08) 0%, transparent 100%);
+  /* Telefon dışı: tam sayfa / tarayıcı arka planı */
+  --viewport: #07070f;
 }
 
 @theme inline {
@@ -22,6 +25,7 @@
   --color-accent-light: var(--accent-light);
   --color-surface: var(--surface);
   --color-surface-light: var(--surface-light);
+  --color-muted: var(--text-muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -31,7 +35,7 @@
 }
 
 body {
-  background: var(--background);
+  background: var(--viewport);
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   overflow: hidden;
@@ -45,7 +49,7 @@ body {
 
 /* Glow button */
 .btn-primary {
-  background: var(--gradient-primary);
+  background: var(--accent);
   position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -69,26 +73,26 @@ body {
   content: '';
   position: absolute;
   inset: -2px;
-  background: var(--gradient-primary);
+  background: var(--accent);
   filter: blur(20px);
-  opacity: 0.4;
+  opacity: 0.35;
   z-index: -1;
   border-radius: inherit;
 }
 
 /* Glass card */
 .glass {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(15, 23, 42, 0.03);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--surface-border);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(15, 23, 42, 0.05);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--surface-border);
 }
 
 /* Shimmer animation */
@@ -106,7 +110,7 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(15, 23, 42, 0.04) 50%, transparent 100%);
   animation: shimmer 3s ease-in-out infinite;
 }
 
@@ -159,11 +163,11 @@ input:focus, textarea:focus {
 
 .option-card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px -5px rgba(15, 23, 42, 0.12);
 }
 
 .option-card.selected {
-  background: var(--gradient-primary);
+  background: var(--accent);
   border-color: transparent;
-  box-shadow: 0 0 30px var(--accent-glow);
+  box-shadow: 0 4px 16px var(--accent-glow);
 }

@@ -13,14 +13,14 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       {/* Background ambient glow */}
       <div
         className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full opacity-30 blur-[100px]"
-        style={{ background: "var(--gradient-primary)" }}
+        style={{ background: "var(--accent)" }}
       />
 
       {/* Floating notes */}
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute text-white/10 text-2xl"
+          className="absolute text-[var(--accent)]/25 text-2xl"
           style={{
             left: `${15 + i * 18}%`,
             top: `${20 + (i % 3) * 20}%`,
@@ -49,7 +49,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
       >
         <div
           className="w-24 h-24 rounded-3xl flex items-center justify-center relative"
-          style={{ backgroundImage: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)" }}
+          style={{ background: "var(--accent)" }}
         >
           <Music className="w-10 h-10 text-white" strokeWidth={1.5} />
           <motion.div
@@ -68,29 +68,18 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         transition={{ delay: 0.2, duration: 0.5 }}
         className="text-center"
       >
-        <div className="text-xs tracking-[0.35em] text-white/40 uppercase mb-1">
+        <div className="text-xs tracking-[0.35em] text-muted uppercase mb-1">
           ICON OF THE SEAS
         </div>
-        <div className="text-[10px] uppercase tracking-[0.28em] text-white/30 mb-3">
+        <div className="text-[10px] uppercase tracking-[0.28em] text-muted mb-3 opacity-80">
           Powered by SongZoo
         </div>
-        <h1 className="text-3xl font-bold text-white mb-3 leading-tight">
+        <h1 className="text-3xl font-bold text-foreground mb-3 leading-tight">
           Your Souvenir
           <br />
-          <span
-            style={{
-              backgroundImage: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-              backgroundSize: "200% 200%",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-            className="animate-gradient"
-          >
-            Song Awaits
-          </span>
+          <span className="text-[var(--accent)]">Song Awaits</span>
         </h1>
-        <p className="text-white/40 text-sm leading-relaxed max-w-[260px] mx-auto">
+        <p className="text-muted text-sm leading-relaxed max-w-[260px] mx-auto">
           Create a personalised song that captures your Icon of the Seas memories
           forever
         </p>
@@ -102,8 +91,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         transition={{ delay: 0.5, duration: 0.5 }}
         onClick={onStart}
         whileTap={{ scale: 0.97 }}
-        className="mt-10 px-8 py-4 rounded-2xl text-white font-semibold text-base flex items-center gap-3 relative overflow-hidden"
-        style={{ backgroundImage: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)" }}
+        className="mt-10 flex items-center gap-3 overflow-hidden rounded-2xl bg-[var(--accent)] px-8 py-4 text-base font-semibold text-white shadow-md active:brightness-95"
       >
         Let&apos;s Create Your Song
         <ArrowRight className="w-5 h-5" />
@@ -113,7 +101,7 @@ export default function WelcomeScreen({ onStart }: WelcomeScreenProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="mt-6 text-[11px] text-white/25"
+        className="mt-6 text-[11px] text-muted opacity-80"
       >
         Takes about 2 minutes
       </motion.p>

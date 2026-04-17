@@ -38,13 +38,11 @@ export default function ButtonGroup({
               ${
                 selected
                   ? "border-transparent text-white shadow-lg"
-                  : "bg-white/[0.03] text-white border-white/[0.08] hover:border-white/[0.15]"
+                  : "bg-[var(--surface)] text-foreground border-[var(--surface-border)] hover:border-[var(--accent)]/35"
               }
             `}
             style={
-              selected
-                ? { backgroundImage: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)" }
-                : undefined
+              selected ? { background: "var(--accent)" } : undefined
             }
           >
             <span className="text-2xl flex-shrink-0">{opt.emoji}</span>
@@ -53,7 +51,7 @@ export default function ButtonGroup({
               {opt.description && (
                 <span
                   className={`text-xs mt-0.5 ${
-                    selected ? "text-white/70" : "text-white/35"
+                    selected ? "text-white/80" : "text-muted"
                   }`}
                 >
                   {opt.description}

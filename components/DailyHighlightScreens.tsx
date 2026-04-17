@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import BrandedHeader from "./BrandedHeader";
 
 interface DailyListProps {
   completedDays: boolean[];
@@ -17,18 +16,17 @@ export function DailyHighlightList({
   const labels: [string, string, string] = ["DAY 1", "DAY 2", "DAY 3"];
   return (
     <div className="h-full w-full flex flex-col">
-      <BrandedHeader />
       <div className="px-5 pt-2 flex items-center">
         <button
           type="button"
           onClick={onBack}
-          className="text-[11px] text-white/35 hover:text-white/55 uppercase tracking-widest"
+          className="text-[11px] text-muted hover:text-foreground uppercase tracking-widest"
         >
           &lt; Back
         </button>
       </div>
       <div className="px-5 flex-1 pt-6">
-        <h2 className="text-lg font-bold text-white text-center mb-8">
+        <h2 className="text-lg font-bold text-foreground text-center mb-8">
           DAILY HIGHLIGHT
         </h2>
         <div className="grid grid-cols-3 gap-3">
@@ -44,10 +42,10 @@ export function DailyHighlightList({
                 whileTap={canOpen ? { scale: 0.97 } : undefined}
                 className={`rounded-2xl border py-6 text-center ${
                   done
-                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"
+                    ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-800"
                     : canOpen
-                      ? "border-white/15 bg-white/[0.04] text-white"
-                      : "border-white/[0.06] bg-white/[0.02] text-white/25 cursor-not-allowed"
+                      ? "border-[var(--surface-border)] bg-[var(--surface)] text-foreground"
+                      : "border-[var(--surface-border)] bg-[var(--surface-light)] text-muted cursor-not-allowed"
                 }`}
               >
                 <span className="text-xs font-bold tracking-widest">
@@ -84,22 +82,21 @@ export function DailyRecordScreen({
 }: DailyRecordProps) {
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
-      <BrandedHeader />
       <div className="px-5 pt-2 flex items-center">
         <button
           type="button"
           onClick={onBack}
-          className="text-[11px] text-white/35 hover:text-white/55 uppercase tracking-widest"
+          className="text-[11px] text-muted hover:text-foreground uppercase tracking-widest"
         >
           &lt; Back
         </button>
       </div>
       <div className="px-5 pb-8 flex-1">
-        <h2 className="text-lg font-bold text-white text-center mt-4 mb-6">
+        <h2 className="text-lg font-bold text-foreground text-center mt-4 mb-6">
           DAY {day}
         </h2>
-        <p className="text-white font-semibold mb-3">Time to record your highlight!</p>
-        <ul className="space-y-3 text-[13px] text-white/45 leading-relaxed list-disc pl-4">
+        <p className="text-foreground font-semibold mb-3">Time to record your highlight!</p>
+        <ul className="space-y-3 text-[13px] text-muted leading-relaxed list-disc pl-4">
           {BULLETS.map((b) => (
             <li key={b.slice(0, 24)}>{b}</li>
           ))}
@@ -108,11 +105,7 @@ export function DailyRecordScreen({
           type="button"
           onClick={onStartRecording}
           whileTap={{ scale: 0.98 }}
-          className="mt-8 w-full py-4 rounded-2xl text-white font-semibold"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-          }}
+          className="mt-8 w-full rounded-2xl bg-[var(--accent)] py-4 font-semibold text-white shadow-md active:brightness-95"
         >
           Start recording
         </motion.button>

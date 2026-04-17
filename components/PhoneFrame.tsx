@@ -12,13 +12,13 @@ export default function PhoneFrame({ children }: PhoneFrameProps) {
       {/* Outer glow */}
       <div
         className="absolute -inset-4 rounded-[52px] opacity-20 blur-2xl pointer-events-none"
-        style={{ backgroundImage: "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)" }}
+        style={{ background: "var(--accent)" }}
       />
 
       {/* Phone body */}
-      <div className="relative w-[390px] h-[844px] rounded-[44px] overflow-hidden border border-white/[0.08] bg-[var(--surface)] shadow-2xl shadow-black/50">
+      <div className="relative w-[390px] h-[844px] rounded-[44px] overflow-hidden border border-[var(--surface-border)] bg-white shadow-2xl shadow-slate-900/10">
         {/* Notch */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[28px] bg-black rounded-b-2xl z-20" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[28px] bg-slate-900 rounded-b-2xl z-20" />
 
         {/* Screen */}
         <div className="absolute inset-0 flex flex-col bg-[var(--background)]">

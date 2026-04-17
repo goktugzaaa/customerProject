@@ -26,14 +26,14 @@ export default function TextArea({
         rows={4}
         className="
           w-full px-5 py-4
-          bg-white/[0.04]
-          border border-white/[0.08]
+          bg-[var(--surface)]
+          border border-[var(--surface-border)]
           rounded-2xl
-          text-white text-base leading-relaxed
-          placeholder:text-white/25
+          text-foreground text-base leading-relaxed
+          placeholder:text-muted
           focus:outline-none
           focus:border-[var(--accent)]
-          focus:bg-white/[0.06]
+          focus:bg-[var(--background)]
           transition-all duration-300
           resize-none
         "

@@ -55,18 +55,10 @@ function ProfanityRow({
               flex flex-col items-center justify-center rounded-2xl border px-2 py-4 min-h-[100px]
               ${
                 selected
-                  ? "border-transparent text-white shadow-lg"
-                  : "bg-white/[0.03] text-white border-white/[0.08] hover:border-white/[0.15]"
+                  ? "border-transparent bg-[var(--accent)] text-white shadow-lg"
+                  : "bg-[var(--surface)] text-foreground border-[var(--surface-border)] hover:border-[var(--accent)]/35"
               }
             `}
-            style={
-              selected
-                ? {
-                    backgroundImage:
-                      "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-                  }
-                : undefined
-            }
           >
             <span className="text-sm font-semibold text-center leading-tight">
               {opt.label}
@@ -74,7 +66,7 @@ function ProfanityRow({
             {opt.symbolLine && (
               <span
                 className={`text-[11px] mt-2 font-mono ${
-                  selected ? "text-white/80" : "text-white/35"
+                  selected ? "text-white/85" : "text-muted"
                 }`}
               >
                 {opt.symbolLine}
@@ -116,8 +108,7 @@ export default function ScreenRenderer({
             transition={{ duration: 0.5, ease: [0, 0.55, 0.45, 1] }}
             className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
             style={{
-              backgroundImage:
-                "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
+              background: "var(--accent)",
             }}
           >
             <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
@@ -137,7 +128,7 @@ export default function ScreenRenderer({
           initial={{ y: 15, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.4 }}
-          className="mt-3 text-[22px] font-bold text-white leading-snug"
+          className="mt-3 text-[22px] font-bold text-foreground leading-snug"
         >
           {data.questions}
         </motion.h2>
@@ -176,9 +167,9 @@ export default function ScreenRenderer({
                   type="checkbox"
                   checked={termsAccepted}
                   onChange={(e) => onTermsChange?.(e.target.checked)}
-                  className="mt-1 w-4 h-4 rounded border-white/20 bg-white/5 accent-[var(--accent)]"
+                  className="mt-1 w-4 h-4 rounded border-[var(--surface-border)] bg-[var(--surface)] accent-[var(--accent)]"
                 />
-                <span className="text-[13px] text-white/55 leading-snug group-hover:text-white/70 transition-colors">
+                <span className="text-[13px] text-muted leading-snug group-hover:text-foreground transition-colors">
                   I agree to the SongZoo Terms of Service
                 </span>
               </label>
@@ -193,7 +184,7 @@ export default function ScreenRenderer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="text-[13px] text-white/25 leading-relaxed pb-4"
+            className="text-[13px] text-muted leading-relaxed pb-4"
           >
             {data.description}
           </motion.div>

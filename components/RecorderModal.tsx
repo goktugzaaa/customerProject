@@ -180,16 +180,16 @@ export default function RecorderModal({
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 80, opacity: 0 }}
-            className="w-full max-w-md m-4 mb-8 rounded-3xl border border-white/10 bg-[var(--surface)] p-5 shadow-2xl"
+            className="w-full max-w-md m-4 mb-8 rounded-3xl border border-[var(--surface-border)] bg-[var(--background)] p-5 shadow-2xl"
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-sm font-semibold text-white">
+              <span className="text-sm font-semibold text-foreground">
                 Voice recorder
               </span>
               <button
                 type="button"
                 onClick={onClose}
-                className="p-2 rounded-xl text-white/40 hover:text-white/70"
+                className="p-2 rounded-xl text-muted hover:text-foreground"
                 aria-label="Close"
               >
                 <X className="w-5 h-5" />
@@ -205,11 +205,7 @@ export default function RecorderModal({
                 <button
                   type="button"
                   onClick={startRecording}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl text-white font-medium"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-                  }}
+                  className="flex items-center gap-2 rounded-2xl bg-[var(--accent)] px-5 py-3 font-medium text-white shadow-md active:brightness-95"
                 >
                   <Mic className="w-4 h-4" />
                   Record
@@ -220,7 +216,7 @@ export default function RecorderModal({
                   <button
                     type="button"
                     onClick={pauseRecording}
-                    className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-white/10 text-white"
+                    className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[var(--surface-light)] text-foreground"
                   >
                     <Pause className="w-4 h-4" />
                     Pause
@@ -240,7 +236,7 @@ export default function RecorderModal({
                   <button
                     type="button"
                     onClick={resumeRecording}
-                    className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-white/10 text-white"
+                    className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[var(--surface-light)] text-foreground"
                   >
                     <Play className="w-4 h-4" />
                     Record
@@ -259,14 +255,14 @@ export default function RecorderModal({
 
             {(state === "stopped" || transcript) && (
               <div className="mt-2">
-                <p className="text-[11px] uppercase tracking-widest text-white/30 mb-2">
+                <p className="text-[11px] uppercase tracking-widest text-muted mb-2">
                   Transcript (POC)
                 </p>
                 <textarea
                   value={transcript}
                   onChange={(e) => setTranscript(e.target.value)}
                   rows={4}
-                  className="w-full px-4 py-3 rounded-2xl bg-white/[0.05] border border-white/10 text-white text-sm"
+                  className="w-full px-4 py-3 rounded-2xl bg-[var(--surface)] border border-[var(--surface-border)] text-foreground text-sm"
                 />
               </div>
             )}
@@ -275,11 +271,7 @@ export default function RecorderModal({
               <button
                 type="button"
                 onClick={handleFinish}
-                className="mt-4 w-full py-3 rounded-2xl text-white font-semibold"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-                }}
+                className="mt-4 w-full rounded-2xl bg-[var(--accent)] py-3 font-semibold text-white shadow-md active:brightness-95"
               >
                 Save & continue
               </button>

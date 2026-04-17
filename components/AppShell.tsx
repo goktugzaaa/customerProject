@@ -217,26 +217,35 @@ export default function AppShell() {
     currentScreen?.nextLabel === "done" ? "DONE >" : "NEXT >";
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center relative overflow-hidden bg-[var(--background)]">
+    <div className="h-screen w-screen flex items-center justify-center relative overflow-hidden bg-[var(--viewport)]">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute -top-[30%] -left-[20%] w-[60%] h-[60%] rounded-full opacity-[0.07] blur-[120px]"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-          }}
+          className="absolute -top-[30%] -left-[20%] w-[60%] h-[60%] rounded-full opacity-[0.14] blur-[120px]"
+          style={{ background: "var(--accent)" }}
         />
         <div
-          className="absolute -bottom-[20%] -right-[15%] w-[50%] h-[50%] rounded-full opacity-[0.05] blur-[100px]"
+          className="absolute -bottom-[20%] -right-[15%] w-[50%] h-[50%] rounded-full opacity-[0.1] blur-[100px]"
           style={{
-            backgroundImage:
-              "linear-gradient(135deg, #ec4899 0%, #6366f1 100%)",
+            background:
+              "linear-gradient(135deg, #60a5fa 0%, #2563eb 55%, #1d4ed8 100%)",
           }}
         />
       </div>
 
       <PhoneFrame>
-        <div className="h-full flex flex-col relative">
+        <div className="h-full flex flex-col relative bg-[var(--background)]">
+          {view !== "landing" && (
+            <header className="shrink-0 z-20">
+              <BrandedHeader />
+            </header>
+          )}
+          <div
+            className={
+              view === "landing"
+                ? "min-h-0 flex-1"
+                : "flex min-h-0 flex-1 flex-col"
+            }
+          >
           <AnimatePresence mode="wait">
             {view === "landing" && (
               <motion.div
@@ -283,12 +292,11 @@ export default function AppShell() {
                 exit={{ opacity: 0 }}
                 className="h-full flex flex-col"
               >
-                <BrandedHeader />
                 <div className="px-5 pt-1 pb-2 flex items-center justify-between">
                   <button
                     type="button"
                     onClick={goWizardBack}
-                    className="flex items-center gap-1 text-white/40 hover:text-white/70 transition-colors -ml-1"
+                    className="flex items-center gap-1 text-muted hover:text-foreground transition-colors -ml-1"
                   >
                     <ChevronLeft className="w-5 h-5" />
                     <span className="text-xs">&lt; BACK</span>
@@ -327,17 +335,9 @@ export default function AppShell() {
                     whileTap={wizardValid ? { scale: 0.97 } : undefined}
                     className={`w-full py-4 rounded-2xl font-semibold text-[15px] flex items-center justify-center gap-2 ${
                       wizardValid
-                        ? "text-white"
-                        : "text-white/35 bg-white/[0.06] cursor-not-allowed"
+                        ? "bg-[var(--accent)] text-white shadow-md active:brightness-95"
+                        : "text-muted bg-[var(--surface-light)] cursor-not-allowed"
                     }`}
-                    style={
-                      wizardValid
-                        ? {
-                            backgroundImage:
-                              "linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%)",
-                          }
-                        : undefined
-                    }
                   >
                     {nextLabel}
                   </motion.button>
@@ -512,6 +512,14 @@ export default function AppShell() {
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
+          {view !== "landing" && (
+            <footer className="shrink-0 border-t border-[var(--surface-border)] bg-[var(--background)] px-4 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+              <p className="text-center text-[9px] uppercase tracking-[0.3em] text-muted">
+                Powered by SongZoo
+              </p>
+            </footer>
+          )}
         </div>
       </PhoneFrame>
     </div>
