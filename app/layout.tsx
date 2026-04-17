@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
-import { VIEWPORT_BACKGROUND } from "@/lib/siteTheme";
 import "./globals.css";
 
 const inter = Inter({
@@ -14,7 +13,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#2563eb",
+  themeColor: "#07070f",
 };
 
 export const metadata: Metadata = {
@@ -44,7 +43,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} h-full min-h-screen antialiased`}
-      style={{ backgroundColor: VIEWPORT_BACKGROUND }}
+      style={{ backgroundColor: "#07070f" }}
     >
       <head>
         <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
@@ -52,7 +51,7 @@ export default function RootLayout({
       </head>
       <body
         className="flex min-h-full min-h-screen flex-col"
-        style={{ backgroundColor: VIEWPORT_BACKGROUND }}
+        style={{ backgroundColor: "#07070f" }}
       >
         {children}
       </body>

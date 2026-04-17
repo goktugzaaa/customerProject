@@ -14,8 +14,8 @@
   --text-secondary: rgba(15, 23, 42, 0.75);
   --gradient-primary: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
   --gradient-surface: linear-gradient(180deg, rgba(37, 99, 235, 0.08) 0%, transparent 100%);
-  /* Telefon dışı — lib/siteTheme.ts VIEWPORT_BACKGROUND ile aynı hex */
-  --viewport: #e8edf5;
+  /* Telefon dışı — layout.tsx html/body ile aynı hex (#07070f) tutulmalı */
+  --viewport: #07070f;
 }
 
 html {
