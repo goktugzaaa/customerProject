@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, type ReactNode } from "react";
-import { VIEWPORT_BACKGROUND } from "@/lib/siteTheme";
+import { VIEWPORT_OUTER_HEX } from "@/lib/pageBackground";
 
 export default function ClientOnly({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -14,7 +14,7 @@ export default function ClientOnly({ children }: { children: ReactNode }) {
     return (
       <div
         className="flex h-screen w-screen items-center justify-center"
-        style={{ backgroundColor: VIEWPORT_BACKGROUND }}
+        style={{ backgroundColor: VIEWPORT_OUTER_HEX }}
       >
         <div
           className="w-12 h-12 rounded-2xl animate-pulse"

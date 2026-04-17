@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { VIEWPORT_OUTER_HEX } from "@/lib/pageBackground";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,7 +14,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#07070f",
+  themeColor: VIEWPORT_OUTER_HEX,
 };
 
 export const metadata: Metadata = {
@@ -51,7 +52,7 @@ export default function RootLayout({
       </head>
       <body
         className="flex min-h-full min-h-screen flex-col"
-        style={{ backgroundColor: "#07070f" }}
+        style={{ backgroundColor: VIEWPORT_OUTER_HEX }}
       >
         {children}
       </body>
