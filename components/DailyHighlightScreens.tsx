@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import BackNavButton from "./BackNavButton";
 
 interface DailyListProps {
   completedDays: boolean[];
@@ -16,16 +17,10 @@ export function DailyHighlightList({
   const labels: [string, string, string] = ["DAY 1", "DAY 2", "DAY 3"];
   return (
     <div className="h-full w-full flex flex-col">
-      <div className="px-5 pt-2 flex items-center">
-        <button
-          type="button"
-          onClick={onBack}
-          className="text-[11px] text-muted hover:text-foreground uppercase tracking-widest"
-        >
-          &lt; Back
-        </button>
+      <div className="flex items-center px-5 pt-2">
+        <BackNavButton onClick={onBack} />
       </div>
-      <div className="px-5 flex-1 pt-6">
+      <div className="flex-1 px-5 pt-6">
         <h2 className="text-lg font-bold text-foreground text-center mb-8">
           DAILY HIGHLIGHT
         </h2>
@@ -82,16 +77,10 @@ export function DailyRecordScreen({
 }: DailyRecordProps) {
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
-      <div className="px-5 pt-2 flex items-center">
-        <button
-          type="button"
-          onClick={onBack}
-          className="text-[11px] text-muted hover:text-foreground uppercase tracking-widest"
-        >
-          &lt; Back
-        </button>
+      <div className="flex items-center px-5 pt-2">
+        <BackNavButton onClick={onBack} />
       </div>
-      <div className="px-5 pb-8 flex-1">
+      <div className="flex-1 px-5 pb-8">
         <h2 className="text-lg font-bold text-foreground text-center mt-4 mb-6">
           DAY {day}
         </h2>

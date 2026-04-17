@@ -2,8 +2,10 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronLeft } from "lucide-react";
-import { screens } from "@/lib/screens";
+import {
+  getWizardScreens,
+  isPresentationMode,
+} from "@/lib/presentationMode";
 import ScreenRenderer from "./ScreenRenderer";
 import PhoneFrame from "./PhoneFrame";
 import LandingScreen from "./LandingScreen";
@@ -23,6 +25,8 @@ import {
 } from "./SurveyScreens";
 import RecorderModal from "./RecorderModal";
 import BrandedHeader from "./BrandedHeader";
+import BackNavButton from "./BackNavButton";
+import PresentationEndScreen from "./PresentationEndScreen";
 import { buildDemoEmailBody, type DemoPayload } from "@/lib/buildDemoEmail";
 
 type View =
@@ -37,7 +41,8 @@ type View =
   | "survey1"
   | "survey2"
   | "survey3"
-  | "thankYou";
+  | "thankYou"
+  | "presentationEnd";
 
 const slideVariants = {
   enter: (direction: number) => ({
@@ -77,8 +82,9 @@ export default function AppShell() {
   const [emailSending, setEmailSending] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
 
-  const currentScreen = screens[wizardStep];
-  const isLastWizardStep = wizardStep === screens.length - 1;
+  const wizardScreens = useMemo(() => getWizardScreens(), []);
+  const currentScreen = wizardScreens[wizardStep];
+  const isLastWizardStep = wizardStep === wizardScreens.length - 1;
 
   const highlightsComplete =
     dayTranscripts[0] !== "" &&
@@ -120,11 +126,15 @@ export default function AppShell() {
     if (!wizardValid) return;
     if (isLastWizardStep) {
       setSongSetupComplete(true);
+      if (isPresentationMode) {
+        setView("presentationEnd");
+        return;
+      }
       setView("notification");
       return;
     }
     setDirection(1);
-    setWizardStep((s) => Math.min(s + 1, screens.length - 1));
+    setWizardStep((s) => Math.min(s + 1, wizardScreens.length - 1));
   };
 
   const goWizardBack = () => {
@@ -214,7 +224,11 @@ export default function AppShell() {
   };
 
   const nextLabel =
-    currentScreen?.nextLabel === "done" ? "DONE >" : "NEXT >";
+    isPresentationMode && isLastWizardStep
+      ? "DONE >"
+      : currentScreen?.nextLabel === "done"
+        ? "DONE >"
+        : "NEXT >";
 
   return (
     <div className="h-screen w-screen flex items-center justify-center relative overflow-hidden bg-[var(--viewport)]">
@@ -271,6 +285,7 @@ export default function AppShell() {
                   songSetupComplete={songSetupComplete}
                   highlightsComplete={highlightsComplete}
                   surveyUnlocked={surveyUnlocked}
+                  presentationMode={isPresentationMode}
                   onSongSetup={openSongWizard}
                   onDailyHighlight={() => {
                     if (!songSetupComplete) return;
@@ -292,15 +307,8 @@ export default function AppShell() {
                 exit={{ opacity: 0 }}
                 className="h-full flex flex-col"
               >
-                <div className="px-5 pt-1 pb-2 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={goWizardBack}
-                    className="flex items-center gap-1 text-muted hover:text-foreground transition-colors -ml-1"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                    <span className="text-xs">&lt; BACK</span>
-                  </button>
+                <div className="flex items-center justify-between px-5 pb-2 pt-2">
+                  <BackNavButton onClick={goWizardBack} label="Back" />
                 </div>
                 <div className="flex-1 relative overflow-hidden">
                   <AnimatePresence mode="wait" custom={direction}>
@@ -342,6 +350,18 @@ export default function AppShell() {
                     {nextLabel}
                   </motion.button>
                 </div>
+              </motion.div>
+            )}
+
+            {view === "presentationEnd" && (
+              <motion.div
+                key="presentationEnd"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="h-full"
+              >
+                <PresentationEndScreen onRestart={resetAll} />
               </motion.div>
             )}
 

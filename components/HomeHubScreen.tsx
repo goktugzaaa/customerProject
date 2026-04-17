@@ -10,6 +10,8 @@ interface HomeHubScreenProps {
   onSongSetup: () => void;
   onDailyHighlight: () => void;
   onQuickSurvey: () => void;
+  /** Sunum modu: yalnızca Song Setup kartı */
+  presentationMode?: boolean;
 }
 
 export default function HomeHubScreen({
@@ -19,6 +21,7 @@ export default function HomeHubScreen({
   onSongSetup,
   onDailyHighlight,
   onQuickSurvey,
+  presentationMode = false,
 }: HomeHubScreenProps) {
   return (
     <div className="h-full w-full flex min-h-0 flex-col overflow-y-auto">
@@ -40,25 +43,30 @@ export default function HomeHubScreen({
             onClick={onSongSetup}
             done={songSetupComplete}
           />
-          <HubCard
-            title="DAILY HIGHLIGHT"
-            subtitle="(Takes only 1 minute per day)"
-            disabled={!songSetupComplete}
-            onClick={onDailyHighlight}
-            done={highlightsComplete}
-          />
-          <HubCard
-            title="QUICK SURVEY"
-            subtitle="(Takes only 5 minutes – end of cruise)"
-            disabled={!surveyUnlocked}
-            onClick={onQuickSurvey}
-            done={false}
-          />
+          {!presentationMode && (
+            <>
+              <HubCard
+                title="DAILY HIGHLIGHT"
+                subtitle="(Takes only 1 minute per day)"
+                disabled={!songSetupComplete}
+                onClick={onDailyHighlight}
+                done={highlightsComplete}
+              />
+              <HubCard
+                title="QUICK SURVEY"
+                subtitle="(Takes only 5 minutes – end of cruise)"
+                disabled={!surveyUnlocked}
+                onClick={onQuickSurvey}
+                done={false}
+              />
+            </>
+          )}
         </div>
 
         <p className="mt-8 text-[13px] text-muted text-center leading-relaxed px-2">
-          We&apos;ll create your fully personalized song and email it to you
-          24-48 hours after your cruise – all for free!
+          {presentationMode
+            ? "Preview build — more flows unlock in the full release."
+            : "We'll create your fully personalized song and email it to you 24-48 hours after your cruise – all for free!"}
         </p>
         </div>
       </div>

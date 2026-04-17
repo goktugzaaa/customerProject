@@ -14,8 +14,12 @@
   --text-secondary: rgba(15, 23, 42, 0.75);
   --gradient-primary: linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #3b82f6 100%);
   --gradient-surface: linear-gradient(180deg, rgba(37, 99, 235, 0.08) 0%, transparent 100%);
-  /* Telefon dışı: tam sayfa / tarayıcı arka planı */
-  --viewport: #07070f;
+  /* Telefon dışı: tam sayfa — açık, mavimsi gri (siyah “tema” hissi vermesin) */
+  --viewport: #e8edf5;
+}
+
+html {
+  color-scheme: light;
 }
 
 @theme inline {
