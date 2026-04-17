@@ -28,6 +28,7 @@ import BrandedHeader from "./BrandedHeader";
 import BackNavButton from "./BackNavButton";
 import PresentationEndScreen from "./PresentationEndScreen";
 import { buildDemoEmailBody, type DemoPayload } from "@/lib/buildDemoEmail";
+import { VIEWPORT_BACKGROUND } from "@/lib/siteTheme";
 
 type View =
   | "landing"
@@ -231,7 +232,10 @@ export default function AppShell() {
         : "NEXT >";
 
   return (
-    <div className="h-screen w-screen flex items-center justify-center relative overflow-hidden bg-[var(--viewport)]">
+    <div
+      className="relative flex h-screen w-screen items-center justify-center overflow-hidden"
+      style={{ backgroundColor: VIEWPORT_BACKGROUND }}
+    >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className="absolute -top-[30%] -left-[20%] w-[60%] h-[60%] rounded-full opacity-[0.14] blur-[120px]"
