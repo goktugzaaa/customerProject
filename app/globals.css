@@ -177,3 +177,25 @@ input:focus, textarea:focus {
   border-color: transparent;
   box-shadow: 0 4px 16px var(--accent-glow);
 }
+
+/* ── Responsive Phone Frame ────────────────────────────────────
+   The phone body is always 390×844 logical pixels.
+   We use CSS transform: scale() to fit it inside the viewport.
+   --phone-w / --phone-h are the logical size.
+   The scale is the smallest factor that keeps either axis in bounds.
+   ──────────────────────────────────────────────────────────── */
+.phone-frame-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.phone-frame-scaler {
+  position: relative;
+  width: 390px;
+  height: 844px;
+  flex-shrink: 0;
+  transform-origin: center center;
+}
