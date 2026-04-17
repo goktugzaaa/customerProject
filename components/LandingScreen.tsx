@@ -6,23 +6,45 @@ interface LandingScreenProps {
   onLetsGo: () => void;
 }
 
+const easeOut = [0.22, 1, 0.36, 1] as const;
+
+const copyContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.07,
+      delayChildren: 0.52,
+    },
+  },
+};
+
+const copyItem = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: easeOut },
+  },
+};
+
 export default function LandingScreen({ onLetsGo }: LandingScreenProps) {
   return (
-    <div className="h-full w-full flex flex-col relative overflow-hidden">
-      <div className="flex-1 flex flex-col items-center justify-center px-6 pb-10">
+    <div className="relative flex h-full w-full flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col items-center justify-center px-6 pb-10">
         <div
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[280px] h-[280px] rounded-full opacity-25 blur-[90px] pointer-events-none"
+          className="pointer-events-none absolute left-1/2 top-1/3 h-[280px] w-[280px] -translate-x-1/2 rounded-full opacity-25 blur-[90px]"
           style={{ background: "var(--accent)" }}
         />
 
+        {/* Logo: alttan yukarı “giriş” */}
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 64 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative text-center max-w-[300px]"
+          transition={{ duration: 0.85, ease: easeOut }}
+          className="relative mb-8 text-center"
         >
           <div
-            className="mb-8 flex items-stretch justify-center gap-x-1.5 text-[var(--accent)] sm:gap-x-2"
+            className="flex items-stretch justify-center gap-x-1.5 text-[var(--accent)] sm:gap-x-2"
             aria-label="Icon of the Seas"
           >
             <span className="flex items-center text-4xl font-black uppercase leading-none tracking-tight sm:text-5xl">
@@ -40,33 +62,56 @@ export default function LandingScreen({ onLetsGo }: LandingScreenProps) {
               SEAS
             </span>
           </div>
-          <p className="text-foreground text-2xl font-bold leading-tight tracking-tight">
+        </motion.div>
+
+        <motion.div
+          variants={copyContainer}
+          initial="hidden"
+          animate="show"
+          className="relative max-w-[300px] text-center"
+        >
+          <motion.p
+            variants={copyItem}
+            className="text-2xl font-bold leading-tight tracking-tight text-foreground"
+          >
             TURN YOUR
-          </p>
-          <p className="mt-4 text-[var(--accent)] text-xl font-semibold uppercase tracking-wide">
+          </motion.p>
+          <motion.p
+            variants={copyItem}
+            className="mt-4 text-xl font-semibold uppercase tracking-wide text-[var(--accent)]"
+          >
             cruise
-          </p>
-          <p className="mt-2 text-muted text-sm leading-snug">
+          </motion.p>
+          <motion.p
+            variants={copyItem}
+            className="mt-2 text-sm leading-snug text-muted"
+          >
             VALUED AT $150
             <br />
             <span className="opacity-75">(yours for free!)</span>
-          </p>
-          <p className="mt-8 text-foreground text-2xl font-bold leading-tight">
+          </motion.p>
+          <motion.p
+            variants={copyItem}
+            className="mt-8 text-2xl font-bold leading-tight text-foreground"
+          >
             INTO YOUR
-          </p>
-          <p className="mt-2 text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-800 via-blue-600 to-blue-500">
+          </motion.p>
+          <motion.p
+            variants={copyItem}
+            className="mt-2 bg-gradient-to-r from-blue-800 via-blue-600 to-blue-500 bg-clip-text text-3xl font-bold text-transparent"
+          >
             SONG
-          </p>
+          </motion.p>
         </motion.div>
 
         <motion.button
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.45 }}
+          transition={{ delay: 1.05, duration: 0.5, ease: easeOut }}
           type="button"
           onClick={onLetsGo}
           whileTap={{ scale: 0.97 }}
-          className="mt-12 w-full max-w-[280px] py-4 rounded-2xl bg-[var(--accent)] text-white font-bold text-base uppercase tracking-widest shadow-md active:brightness-95"
+          className="mt-12 w-full max-w-[280px] rounded-2xl bg-[var(--accent)] py-4 text-base font-bold uppercase tracking-widest text-white shadow-md active:brightness-95"
         >
           LET&apos;S GO!
         </motion.button>
@@ -74,7 +119,7 @@ export default function LandingScreen({ onLetsGo }: LandingScreenProps) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.4 }}
+          transition={{ delay: 1.22, duration: 0.45 }}
           className="mt-6 text-center text-[10px] uppercase tracking-[0.35em] text-muted"
         >
           Powered by SongZoo
