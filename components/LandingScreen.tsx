@@ -12,18 +12,18 @@ const copyContainer = {
   hidden: {},
   show: {
     transition: {
-      staggerChildren: 0.07,
-      delayChildren: 0.52,
+      staggerChildren: 0.14,
+      delayChildren: 0.4,
     },
   },
 };
 
-const copyItem = {
-  hidden: { opacity: 0, y: 20 },
+const copyBlock = {
+  hidden: { opacity: 0, y: 16 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: easeOut },
+    transition: { duration: 0.48, ease: easeOut },
   },
 };
 
@@ -36,11 +36,11 @@ export default function LandingScreen({ onLetsGo }: LandingScreenProps) {
           style={{ background: "var(--accent)" }}
         />
 
-        {/* Logo: alttan yukarı “giriş” */}
+        {/* Logo: ekranın orta-altından yukarı uzun bir çıkış */}
         <motion.div
-          initial={{ opacity: 0, y: 64 }}
+          initial={{ opacity: 0, y: "22vh" }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.85, ease: easeOut }}
+          transition={{ duration: 0.95, ease: easeOut }}
           className="relative mb-8 text-center"
         >
           <div
@@ -70,44 +70,33 @@ export default function LandingScreen({ onLetsGo }: LandingScreenProps) {
           animate="show"
           className="relative max-w-[300px] text-center"
         >
-          <motion.p
-            variants={copyItem}
-            className="text-2xl font-bold leading-tight tracking-tight text-foreground"
-          >
-            TURN YOUR
-          </motion.p>
-          <motion.p
-            variants={copyItem}
-            className="mt-4 text-xl font-semibold uppercase tracking-wide text-[var(--accent)]"
-          >
-            cruise
-          </motion.p>
-          <motion.p
-            variants={copyItem}
-            className="mt-2 text-sm leading-snug text-muted"
-          >
-            VALUED AT $150
-            <br />
-            <span className="opacity-75">(yours for free!)</span>
-          </motion.p>
-          <motion.p
-            variants={copyItem}
-            className="mt-8 text-2xl font-bold leading-tight text-foreground"
-          >
-            INTO YOUR
-          </motion.p>
-          <motion.p
-            variants={copyItem}
-            className="mt-2 bg-gradient-to-r from-blue-800 via-blue-600 to-blue-500 bg-clip-text text-3xl font-bold text-transparent"
-          >
-            SONG
-          </motion.p>
+          <motion.div variants={copyBlock}>
+            <p className="text-2xl font-bold leading-tight tracking-tight text-foreground">
+              TURN YOUR
+            </p>
+            <p className="mt-4 text-xl font-semibold uppercase tracking-wide text-[var(--accent)]">
+              cruise
+            </p>
+            <p className="mt-2 text-sm leading-snug text-muted">
+              VALUED AT $150
+              <br />
+              <span className="opacity-75">(yours for free!)</span>
+            </p>
+          </motion.div>
+          <motion.div variants={copyBlock} className="mt-8">
+            <p className="text-2xl font-bold leading-tight text-foreground">
+              INTO YOUR
+            </p>
+            <p className="mt-2 bg-gradient-to-r from-blue-800 via-blue-600 to-blue-500 bg-clip-text text-3xl font-bold text-transparent">
+              SONG
+            </p>
+          </motion.div>
         </motion.div>
 
         <motion.button
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.05, duration: 0.5, ease: easeOut }}
+          transition={{ delay: 0.92, duration: 0.48, ease: easeOut }}
           type="button"
           onClick={onLetsGo}
           whileTap={{ scale: 0.97 }}
@@ -119,7 +108,7 @@ export default function LandingScreen({ onLetsGo }: LandingScreenProps) {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.22, duration: 0.45 }}
+          transition={{ delay: 1.05, duration: 0.4 }}
           className="mt-6 text-center text-[10px] uppercase tracking-[0.35em] text-muted"
         >
           Powered by SongZoo
