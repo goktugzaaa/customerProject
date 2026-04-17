@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft } from "lucide-react";
 import {
   getWizardScreens,
   isPresentationMode,
@@ -25,7 +26,6 @@ import {
 } from "./SurveyScreens";
 import RecorderModal from "./RecorderModal";
 import BrandedHeader from "./BrandedHeader";
-import BackNavButton from "./BackNavButton";
 import PresentationEndScreen from "./PresentationEndScreen";
 import { buildDemoEmailBody, type DemoPayload } from "@/lib/buildDemoEmail";
 import { VIEWPORT_OUTER_HEX } from "@/lib/pageBackground";
@@ -311,8 +311,17 @@ export default function AppShell() {
                 exit={{ opacity: 0 }}
                 className="h-full flex flex-col"
               >
-                <div className="flex items-center justify-between px-5 pb-2 pt-2">
-                  <BackNavButton onClick={goWizardBack} label="Back" />
+                <div className="flex items-center justify-between px-5 pb-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={goWizardBack}
+                    className="-ml-1 flex items-center gap-0.5 py-2 text-muted transition-colors hover:text-foreground"
+                  >
+                    <ChevronLeft className="h-4 w-4 shrink-0" strokeWidth={2} />
+                    <span className="text-[11px] font-medium uppercase tracking-widest">
+                      Back
+                    </span>
+                  </button>
                 </div>
                 <div className="flex-1 relative overflow-hidden">
                   <AnimatePresence mode="wait" custom={direction}>
