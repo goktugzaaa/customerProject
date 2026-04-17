@@ -40,12 +40,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      className={`${inter.variable} h-full min-h-screen antialiased`}
+      style={{ backgroundColor: "var(--viewport)" }}
+    >
       <head>
         <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icons/icon-192.png" />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body
+        className="flex min-h-full min-h-screen flex-col"
+        style={{ backgroundColor: "var(--viewport)" }}
+      >
+        {children}
+      </body>
     </html>
   );
 }
