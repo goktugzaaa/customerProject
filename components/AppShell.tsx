@@ -28,7 +28,6 @@ import RecorderModal from "./RecorderModal";
 import BrandedHeader from "./BrandedHeader";
 import PresentationEndScreen from "./PresentationEndScreen";
 import { buildDemoEmailBody, type DemoPayload } from "@/lib/buildDemoEmail";
-import { VIEWPORT_OUTER_HEX } from "@/lib/pageBackground";
 
 type View =
   | "landing"
@@ -232,11 +231,9 @@ export default function AppShell() {
         : "NEXT >";
 
   return (
-    <div
-      className="relative flex h-screen w-screen items-center justify-center overflow-hidden"
-      style={{ backgroundColor: VIEWPORT_OUTER_HEX }}
-    >
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="appshell-outer">
+      {/* Decorative blobs — desktop only (hidden on mobile via CSS) */}
+      <div className="appshell-bg-blobs">
         <div
           className="absolute -top-[30%] -left-[20%] w-[60%] h-[60%] rounded-full opacity-[0.14] blur-[120px]"
           style={{ background: "var(--accent)" }}

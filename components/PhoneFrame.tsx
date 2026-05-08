@@ -10,26 +10,47 @@ const PHONE_W = 390;
 const PHONE_H = 844;
 const PAD = 40; // px padding on each side
 
-function usePhoneScale() {
+/** Breakpoint below which we consider "mobile" — skip the phone chrome */
+const MOBILE_MAX = 640;
+
+function useDeviceMode() {
+  const [isMobile, setIsMobile] = useState(false);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
     function calc() {
-      const sw = (window.innerWidth - PAD * 2) / PHONE_W;
-      const sh = (window.innerHeight - PAD * 2) / PHONE_H;
-      setScale(Math.min(1, sw, sh));
+      const w = window.innerWidth;
+      const mobile = w <= MOBILE_MAX;
+      setIsMobile(mobile);
+
+      if (!mobile) {
+        // Desktop: scale the phone frame to fit viewport
+        const sw = (w - PAD * 2) / PHONE_W;
+        const sh = (window.innerHeight - PAD * 2) / PHONE_H;
+        setScale(Math.min(1, sw, sh));
+      }
     }
     calc();
     window.addEventListener("resize", calc);
     return () => window.removeEventListener("resize", calc);
   }, []);
 
-  return scale;
+  return { isMobile, scale };
 }
 
 export default function PhoneFrame({ children }: PhoneFrameProps) {
-  const scale = usePhoneScale();
+  const { isMobile, scale } = useDeviceMode();
 
+  /* ─── Mobile: full-screen, no phone chrome ─── */
+  if (isMobile) {
+    return (
+      <div className="phone-mobile-wrapper">
+        {children}
+      </div>
+    );
+  }
+
+  /* ─── Desktop: phone mockup with notch + border ─── */
   return (
     <div className="phone-frame-wrapper">
       <div

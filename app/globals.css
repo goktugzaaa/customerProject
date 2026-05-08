@@ -179,11 +179,61 @@ input:focus, textarea:focus {
 }
 
 /* ── Responsive Phone Frame ────────────────────────────────────
-   The phone body is always 390×844 logical pixels.
-   We use CSS transform: scale() to fit it inside the viewport.
-   --phone-w / --phone-h are the logical size.
-   The scale is the smallest factor that keeps either axis in bounds.
+   Desktop: 390×844 phone body, scaled to fit viewport.
+   Mobile (≤640px): full-screen, no phone chrome.
    ──────────────────────────────────────────────────────────── */
+
+/* ── Mobile: full-screen app ───────────────────────────────── */
+.phone-mobile-wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;            /* use dynamic viewport height on iOS Safari */
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  overflow: hidden;
+  /* respect the safe-area on notched phones */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* ── AppShell outer wrapper ────────────────────────────────── */
+.appshell-outer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background-color: #07070f;         /* dark bg for desktop phone-frame */
+}
+
+.appshell-bg-blobs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* On mobile, strip the dark background & hide desktop-only blobs */
+@media (max-width: 640px) {
+  .appshell-outer {
+    background-color: var(--background) !important;
+  }
+  .appshell-bg-blobs {
+    display: none;
+  }
+  html, body {
+    background-color: var(--background) !important;
+  }
+}
+
+/* ── Desktop: phone frame mockup ──────────────────────────── */
 .phone-frame-wrapper {
   display: flex;
   align-items: center;

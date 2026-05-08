@@ -2,14 +2,41 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, Square, Pause, Play, X } from "lucide-react";
+import { Mic, Square, Pause, Play, X, Loader2 } from "lucide-react";
 
-type RecorderState = "idle" | "recording" | "paused" | "stopped";
+type RecorderState = "idle" | "recording" | "paused" | "stopped" | "transcribing";
 
 interface RecorderModalProps {
   open: boolean;
   onClose: () => void;
   onComplete: (transcript: string) => void;
+}
+
+/**
+ * Pick a MIME type that the current browser supports.
+ * Safari typically supports audio/mp4, Chrome/Firefox support audio/webm.
+ */
+function getSupportedMimeType(): string {
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus",
+    "audio/ogg",
+  ];
+  for (const mime of candidates) {
+    if (MediaRecorder.isTypeSupported(mime)) return mime;
+  }
+  return ""; // browser default
+}
+
+/**
+ * Map MIME type to file extension for the API.
+ */
+function mimeToExt(mime: string): string {
+  if (mime.includes("mp4")) return "mp4";
+  if (mime.includes("ogg")) return "ogg";
+  return "webm";
 }
 
 export default function RecorderModal({
@@ -20,11 +47,36 @@ export default function RecorderModal({
   const [state, setState] = useState<RecorderState>("idle");
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [elapsed, setElapsed] = useState(0);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const mimeTypeRef = useRef<string>("");
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  /* ── Timer ────────────────────────────────────── */
+  const startTimer = useCallback(() => {
+    timerRef.current = setInterval(() => {
+      setElapsed((e) => e + 1);
+    }, 1000);
+  }, []);
+
+  const stopTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  }, []);
+
+  const formatTime = (secs: number) => {
+    const m = Math.floor(secs / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (secs % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
+  /* ── Cleanup ──────────────────────────────────── */
   const stopStreams = useCallback(() => {
     mediaRecorderRef.current?.stream
       .getTracks()
@@ -32,69 +84,81 @@ export default function RecorderModal({
     mediaRecorderRef.current = null;
   }, []);
 
-  const trySpeechFromMic = useCallback(() => {
-    const SR =
-      typeof window !== "undefined"
-        ? (window as unknown as { SpeechRecognition?: typeof SpeechRecognition; webkitSpeechRecognition?: typeof SpeechRecognition }).SpeechRecognition ||
-          (window as unknown as { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition
-        : undefined;
-    if (!SR) return null;
-    const r = new SR();
-    r.lang = "en-US";
-    r.continuous = true;
-    r.interimResults = true;
-    return r;
-  }, []);
-
   useEffect(() => {
     if (!open) {
       setState("idle");
       setTranscript("");
       setError(null);
+      setElapsed(0);
       stopStreams();
-      try {
-        recognitionRef.current?.stop();
-      } catch {
-        /* ignore */
-      }
-      recognitionRef.current = null;
+      stopTimer();
     }
-  }, [open, stopStreams]);
+  }, [open, stopStreams, stopTimer]);
 
+  /* ── Transcription via server API ─────────────── */
+  const transcribeAudio = useCallback(async (blob: Blob, ext: string) => {
+    setState("transcribing");
+    try {
+      const formData = new FormData();
+      formData.append("audio", blob, `recording.${ext}`);
+
+      const res = await fetch("/api/transcribe", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = (await res.json()) as { text?: string; error?: string };
+
+      if (!res.ok || !data.text) {
+        setError(
+          data.error || "Transcription failed. You can still edit the text below.",
+        );
+        setState("stopped");
+        return;
+      }
+
+      setTranscript(data.text);
+      setState("stopped");
+    } catch {
+      setError("Network error during transcription. You can still edit the text below.");
+      setState("stopped");
+    }
+  }, []);
+
+  /* ── Recording controls ───────────────────────── */
   const startRecording = async () => {
     setError(null);
+    setElapsed(0);
     chunksRef.current = [];
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const rec = new MediaRecorder(stream);
+      const mime = getSupportedMimeType();
+      mimeTypeRef.current = mime;
+
+      const rec = mime
+        ? new MediaRecorder(stream, { mimeType: mime })
+        : new MediaRecorder(stream);
+
       mediaRecorderRef.current = rec;
+
       rec.ondataavailable = (e) => {
         if (e.data.size > 0) chunksRef.current.push(e.data);
       };
-      rec.start();
-      setState("recording");
 
-      const speech = trySpeechFromMic();
-      if (speech) {
-        let text = "";
-        speech.onresult = (ev: SpeechRecognitionEvent) => {
-          for (let i = ev.resultIndex; i < ev.results.length; i++) {
-            text += ev.results[i][0].transcript;
-          }
-          setTranscript(text.trim());
-        };
-        speech.onerror = () => {
-          /* non-fatal for POC */
-        };
-        try {
-          speech.start();
-          recognitionRef.current = speech;
-        } catch {
-          recognitionRef.current = null;
-        }
+      // Collect data every second for reliability
+      rec.start(1000);
+      setState("recording");
+      startTimer();
+    } catch (err: any) {
+      if (!window.isSecureContext || !navigator.mediaDevices) {
+        setError(
+          "Recording requires a secure connection (HTTPS). Since you are testing on mobile via IP address, the browser blocked the microphone. Provide an HTTPS link (like ngrok) or test on localhost.",
+        );
+      } else {
+        setError(
+          "Microphone permission was denied or not available. Please allow microphone access to record.",
+        );
       }
-    } catch {
-      setError("Microphone permission is required for this demo.");
       setState("idle");
     }
   };
@@ -103,11 +167,7 @@ export default function RecorderModal({
     const rec = mediaRecorderRef.current;
     if (rec && rec.state === "recording") {
       rec.pause();
-      try {
-        recognitionRef.current?.stop();
-      } catch {
-        /* ignore */
-      }
+      stopTimer();
       setState("paused");
     }
   };
@@ -116,46 +176,31 @@ export default function RecorderModal({
     const rec = mediaRecorderRef.current;
     if (rec && rec.state === "paused") {
       rec.resume();
-      const speech = trySpeechFromMic();
-      if (speech) {
-        speech.onresult = (ev: SpeechRecognitionEvent) => {
-          setTranscript((prev) => {
-            let add = "";
-            for (let i = ev.resultIndex; i < ev.results.length; i++) {
-              add += ev.results[i][0].transcript;
-            }
-            return (prev + " " + add).trim();
-          });
-        };
-        try {
-          speech.start();
-          recognitionRef.current = speech;
-        } catch {
-          recognitionRef.current = null;
-        }
-      }
+      startTimer();
       setState("recording");
     }
   };
 
   const stopRecording = () => {
+    stopTimer();
     const rec = mediaRecorderRef.current;
-    try {
-      recognitionRef.current?.stop();
-    } catch {
-      /* ignore */
-    }
-    recognitionRef.current = null;
 
     if (rec && rec.state !== "inactive") {
       rec.stop();
       rec.onstop = () => {
         stopStreams();
-        setState("stopped");
-        setTranscript((t) =>
-          t ||
-          "This is the transcribed text from the voice recording (simulated — enable Chrome speech or speak after starting).",
-        );
+        const mime = mimeTypeRef.current || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type: mime });
+        const ext = mimeToExt(mime);
+
+        if (blob.size < 100) {
+          setError("Recording was too short. Please try again.");
+          setState("idle");
+          return;
+        }
+
+        // Send to server for transcription
+        void transcribeAudio(blob, ext);
       };
     } else {
       setState("stopped");
@@ -165,6 +210,16 @@ export default function RecorderModal({
   const handleFinish = () => {
     onComplete(transcript.trim() || "(empty transcript)");
     onClose();
+  };
+
+  /* ── Pulse animation for recording indicator ─── */
+  const pulseVariants = {
+    recording: {
+      scale: [1, 1.3, 1],
+      opacity: [0.6, 1, 0.6],
+      transition: { duration: 1.2, repeat: Infinity, ease: "easeInOut" },
+    },
+    idle: { scale: 1, opacity: 0.6 },
   };
 
   return (
@@ -182,6 +237,7 @@ export default function RecorderModal({
             exit={{ y: 80, opacity: 0 }}
             className="w-full max-w-md m-4 mb-8 rounded-3xl border border-[var(--surface-border)] bg-[var(--background)] p-5 shadow-2xl"
           >
+            {/* Header */}
             <div className="flex items-center justify-between mb-4">
               <span className="text-sm font-semibold text-foreground">
                 Voice recorder
@@ -196,10 +252,43 @@ export default function RecorderModal({
               </button>
             </div>
 
+            {/* Recording indicator + timer */}
+            {(state === "recording" || state === "paused") && (
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <motion.div
+                  className="w-3 h-3 rounded-full bg-rose-500"
+                  variants={pulseVariants}
+                  animate={state === "recording" ? "recording" : "idle"}
+                />
+                <span className="text-lg font-mono font-semibold text-foreground tabular-nums">
+                  {formatTime(elapsed)}
+                </span>
+                {state === "paused" && (
+                  <span className="text-xs text-muted uppercase tracking-wider">
+                    Paused
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Transcribing spinner */}
+            {state === "transcribing" && (
+              <div className="flex flex-col items-center gap-3 mb-4 py-4">
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                >
+                  <Loader2 className="w-8 h-8 text-[var(--accent)]" />
+                </motion.div>
+                <p className="text-sm text-muted">Transcribing your recording…</p>
+              </div>
+            )}
+
             {error && (
               <p className="text-sm text-rose-400/90 mb-3">{error}</p>
             )}
 
+            {/* Controls */}
             <div className="flex flex-wrap gap-2 justify-center mb-4">
               {state === "idle" && (
                 <button
@@ -253,10 +342,11 @@ export default function RecorderModal({
               )}
             </div>
 
-            {(state === "stopped" || transcript) && (
+            {/* Transcript display & edit */}
+            {(state === "stopped" || (transcript && state !== "transcribing")) && (
               <div className="mt-2">
                 <p className="text-[11px] uppercase tracking-widest text-muted mb-2">
-                  Transcript (POC)
+                  Transcript
                 </p>
                 <textarea
                   value={transcript}

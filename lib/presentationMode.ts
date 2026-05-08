@@ -5,8 +5,7 @@ import { screens, type Screen } from "./screens";
  * Tam uygulamayı (tüm hub, anket, vb.) açmak için:
  * `.env.local` veya Vercel’de `NEXT_PUBLIC_PRESENTATION_MODE=false`
  */
-export const isPresentationMode =
-  process.env.NEXT_PUBLIC_PRESENTATION_MODE !== "false";
+export const isPresentationMode = false;
 
 /** Sunumda gösterilecek sihirbaz ekranı sayısı (screens dizisinin başından). */
 export const PRESENTATION_WIZARD_STEP_COUNT = 5;
