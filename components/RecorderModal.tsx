@@ -213,7 +213,7 @@ export default function RecorderModal({
   };
 
   /* ── Pulse animation for recording indicator ─── */
-  const pulseVariants = {
+  const pulseVariants: any = {
     recording: {
       scale: [1, 1.3, 1],
       opacity: [0.6, 1, 0.6],
